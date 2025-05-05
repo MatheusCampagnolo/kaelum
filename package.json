@@ -1,0 +1,21 @@
+{
+  "name": "kaelum",
+  "version": "0.0.1",
+  "description": "A minimalist Node.js framework for web pages and APIs",
+  "main": "index.js",
+  "bin": {
+    "kaelum": "./bin/kaelum.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "framework",
+    "node",
+    "express",
+    "cli",
+    "kaelum"
+  ],
+  "author": "Matheus Campagnolo",
+  "license": "MIT"
+}
