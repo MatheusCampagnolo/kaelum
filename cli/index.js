@@ -1,0 +1,1 @@
+console.log("Kaelum CLI inicializada com sucesso!");
