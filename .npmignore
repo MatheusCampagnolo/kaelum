@@ -1,0 +1,16 @@
+# Exclude development and test folders
+__tests__/
+test/
+coverage/
+
+# Ignore logs and local environment
+*.log
+.env
+
+# Docs and examples
+docs/
+examples/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
