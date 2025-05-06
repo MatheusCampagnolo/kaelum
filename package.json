@@ -18,5 +18,8 @@
     "kaelum"
   ],
   "author": "Matheus Campagnolo",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.3.0"
+  }
 }
