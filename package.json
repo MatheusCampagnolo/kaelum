@@ -23,6 +23,7 @@
   "author": "Matheus Campagnolo",
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^11.3.0"
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.6.0"
   }
 }
