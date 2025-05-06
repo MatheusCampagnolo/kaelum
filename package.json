@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "A minimalist Node.js framework for web pages and APIs",
   "type": "module",
-  "main": "index.js",
+  "main": "kaelum.js",
+  "exports": {
+    ".": "./kaelum.js"
+  },
   "bin": {
     "kaelum": "./cli/index.js"
   },
