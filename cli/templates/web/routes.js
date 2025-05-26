@@ -1,12 +1,25 @@
-function Routes(app) {
+const logger = require("./middlewares/logger");
 
-  app.addRoute('/', {
-    get: (req, res) => res.send("Hello from GET /"),
-    post: (req, res) => res.send("Hello from POST /")
+function Routes(app) {
+  app.addRoute("/", {
+    get: (req, res) => {
+      res.sendFile("index.html", { root: __dirname });
+    },
+    post: (req, res) => res.send("POST: Dados recebidos na página inicial."),
   });
 
-  app.addRoute('/about', {
-    get: (req, res) => res.send("About page")
+  app.addRoute("/about", {
+    get: (req, res) => res.send("About page"),
+  });
+
+  // Rota "/secure" com middleware aplicado diretamente
+  app.addRoute("/secure", {
+    get: [
+      logger,
+      (req, res) => {
+        res.send("GET: Área segura! Middleware foi executado.");
+      },
+    ],
   });
   
 }

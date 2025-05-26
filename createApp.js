@@ -6,6 +6,10 @@ const setMiddleware = require('./core/setMiddleware');
 function createApp() {
   const app = express();
 
+  app.use(express.static('public'));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
   // Encapsula as funções novas dentro do objeto app
   app.start = (port, callback) => start(app, port, callback);
   app.addRoute = (path, handlers) => addRoute(app, path, handlers);
