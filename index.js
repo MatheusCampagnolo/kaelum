@@ -1,9 +1,11 @@
-import { start } from "./core/start.js";
-import { addRoute } from "./core/addRoute.js";
-import { setMiddleware } from "./core/setMiddleware.js";
+const { start } = require("./core/start");
+const { addRoute } = require("./core/addRoute");
+const { setMiddleware } = require("./core/setMiddleware");
+const { createApp } = require("./core/createApp");
 
-export {
+module.exports = {
   start,
   addRoute,
-  setMiddleware
+  setMiddleware,
+  createApp,
 };
