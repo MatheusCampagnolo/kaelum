@@ -1,3 +1,5 @@
-export function setMiddleware() {
+function setMiddleware() {
   console.log("setMiddleware function not implemented yet.");
 }
+
+module.exports = setMiddleware;

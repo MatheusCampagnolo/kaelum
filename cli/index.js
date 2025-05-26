@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createProject } from './create.js';
+const { createProject } = require('./create');
 
 const [,, command] = process.argv;
 

@@ -1,16 +1,15 @@
-import inquirer from "inquirer";
-import path from "path";
-import fs from "fs-extra";
-import { fileURLToPath } from "url";
-import { copyTemplate } from "./utils.js";
+const inquirer = require("inquirer");
+const inq = inquirer.default || inquirer;
+const path = require("path");
+const fs = require("fs-extra");
+const { copyTemplate } = require("./utils");
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const templatesDir = path.resolve(__dirname, "templates");
 
-export async function createProject() {
+async function createProject() {
   console.log("🚀 Bem-vindo ao Kaelum CLI!");
 
-  const answers = await inquirer.prompt([
+  const answers = await inq.prompt([
     {
       type: "input",
       name: "projectName",
@@ -49,3 +48,5 @@ export async function createProject() {
   console.log(`➡️  Acesse a pasta: cd ${projectName}`);
   console.log(`➡️  Inicie o projeto com: npm install && npm start\n`);
 }
+
+module.exports = { createProject };

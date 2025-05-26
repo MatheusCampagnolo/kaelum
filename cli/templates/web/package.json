@@ -2,7 +2,6 @@
   "name": "kaelum-web-app",
   "version": "0.1.0",
   "description": "A minimal web app using Kaelum framework",
-  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
