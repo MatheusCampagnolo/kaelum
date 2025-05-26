@@ -1,9 +1,14 @@
-// routes.js
-// Aqui você pode definir suas rotas utilizando a função `addRoute` da Kaelum
-// Exemplo:
+function Routes(app) {
 
-// import { addRoute } from "kaelum";
+  app.addRoute('/', {
+    get: (req, res) => res.send("Hello from GET /"),
+    post: (req, res) => res.send("Hello from POST /")
+  });
 
-// addRoute('/', (req, res) => {
-//   res.send('Hello from Kaelum!');
-// });
+  app.addRoute('/about', {
+    get: (req, res) => res.send("About page")
+  });
+  
+}
+
+module.exports = Routes;
