@@ -6,30 +6,78 @@
 
 > Kaelum is currently under development and not yet published on npm.
 
-## 💻 Local Development
+## 📦 Installation
 
-To test Kaelum locally, clone the repository and link the CLI globally:
+Kaelum is not yet published on npm, but you can link it locally for testing:
 
 ```bash
 cd path/to/kaelum
 npm link
 ````
 
-Now you can use the CLI anywhere:
+Then use the CLI anywhere:
 
 ```bash
 npx kaelum create
 ```
 
-After creating your template, to test Kaelum, at the moment, it'll require to:
+> 🔗 After generating a project, you'll need to link the framework in the generated folder:
+
 ```bash
 npm link kaelum
 ```
-On the root of the created template.
+
+## 🔧 Usage Example
+
+Here’s an example of how a Kaelum project looks after generation:
+
+**`app.js`**
+
+```js
+const kaelum = require("kaelum");
+const app = kaelum();
+
+const routes = require("./routes");
+routes(app);
+
+app.start(3000);
+```
+
+**`routes.js`**
+
+```js
+function Routes(app) {
+  app.addRoute("/", {
+    get: (req, res) => res.send("Hello from GET /"),
+    post: (req, res) => res.send("Hello from POST /")
+  });
+
+  // Example route using middleware
+  app.addRoute("/admin", {
+    get: [
+      (req, res, next) => {
+        console.log("Middleware on /admin");
+        next();
+      },
+      
+      (req, res) => res.send("Admin Page")
+    ]
+  });
+}
+
+module.exports = Routes;
+```
+
+This demonstrates the use of:
+
+* `addRoute`: Simplified route creation.
+* Middleware support directly in routes.
+* `start`: Server start abstraction.
+* Static file support (through `public/` folder).
 
 ## 📁 Web Template Structure
 
-When you generate a web project, this is the initial structure at the moment:
+When generating a **web** project, the initial structure is:
 
 ```
 my-web-app/
@@ -40,21 +88,44 @@ my-web-app/
 ├── controllers/     # Page controller logic
 │   └── .gitkeep
 ├── middlewares/     # Custom middlewares
-│   └── .gitkeep
+│   └── logger.js   # An Example of a possible middleware
 ├── routes.js        # Route definitions
 ├── app.js           # Server initialization
 └── package.json     # Project metadata and dependencies
 ```
 
-## 🛠 Usage (after MVP implementation)
+> The homepage already comes with an HTML+CSS welcome screen inspired by React's first page.
 
-Once core features are implemented, the following will be available:
+## 🚀 CLI Usage
 
-```js
-import { start, addRoute, setMiddleware } from "kaelum";
+The Kaelum CLI helps you create projects in seconds:
+
+```bash
+npx kaelum create
 ```
 
-These utilities will streamline server creation and route management.
+You'll be prompted to choose a template (currently only "web" is available). It will scaffold a ready-to-run project using the Kaelum structure.
+
+Then:
+
+```bash
+cd my-project
+npm install
+npm link kaelum
+npm start
+```
+
+## 🔮 Future Roadmap
+
+* API template support
+* Advanced configuration with `setConfig`
+* Validation helpers
+* JWT Authentication module
+* File-based routing (optional)
+
+## 🤝 Contributing
+
+> Contribution guidelines will be added soon. Until then, feel free to fork and explore!
 
 ## 📌 License
 
