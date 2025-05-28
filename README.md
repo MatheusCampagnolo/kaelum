@@ -1,83 +1,40 @@
 # Kaelum
 
-**Kaelum** is a minimalist Node.js framework designed to simplify the creation of web pages and REST APIs, especially for beginners. Inspired by Python's clean syntax and powered by Express.js, Kaelum automates project setup and server features with an intuitive CLI.
-
-## 🚧 Project Status
-
-> Kaelum is currently under development and not yet published on npm.
+**Kaelum** is a minimalist Node.js framework designed to simplify the creation of web pages and REST APIs, especially for beginners. Inspired by Python's clean syntax and powered by Express.js, Kaelum automates project setup and server configuration with an intuitive CLI.
 
 ## 📦 Installation
 
-Kaelum is not yet published on npm, but you can link it locally for testing:
-
-```bash
-cd path/to/kaelum
-npm link
-````
-
-Then use the CLI anywhere:
+You can create a new project with Kaelum using:
 
 ```bash
 npx kaelum create
-```
+````
 
-> 🔗 After generating a project, you'll need to link the framework in the generated folder:
+Then install dependencies and start your app:
 
 ```bash
-npm link kaelum
+cd my-project
+npm install
+npm start
 ```
 
-## 🔧 Usage Example
+> **Note:** No need to install Kaelum globally. `npx` handles it automatically!
 
-Here’s an example of how a Kaelum project looks after generation:
+---
 
-**`app.js`**
+## 🧠 Why Kaelum?
 
-```js
-const kaelum = require("kaelum");
-const app = kaelum();
+* 📂 Minimalist MVC folder structure
+* ⚙️ Auto-configured Express setup
+* 🔒 Built-in support for CORS and Helmet
+* 🧱 Easy route management
+* 🧪 Great for learning and building quick prototypes
 
-const routes = require("./routes");
-routes(app);
-
-app.start(3000);
-```
-
-**`routes.js`**
-
-```js
-function Routes(app) {
-  app.addRoute("/", {
-    get: (req, res) => res.send("Hello from GET /"),
-    post: (req, res) => res.send("Hello from POST /")
-  });
-
-  // Example route using middleware
-  app.addRoute("/admin", {
-    get: [
-      (req, res, next) => {
-        console.log("Middleware on /admin");
-        next();
-      },
-      
-      (req, res) => res.send("Admin Page")
-    ]
-  });
-}
-
-module.exports = Routes;
-```
-
-This demonstrates the use of:
-
-* `addRoute`: Simplified route creation.
-* Middleware support directly in routes.
-* `start`: Server start abstraction.
-* Static file support (through `public/` folder).
+---
 
 ## 📁 Web Template Structure
 
-When generating a **web** project, the initial structure is:
+After running `npx kaelum create`, the web template structure looks like this:
 
 ```
 my-web-app/
@@ -88,45 +45,70 @@ my-web-app/
 ├── controllers/     # Page controller logic
 │   └── .gitkeep
 ├── middlewares/     # Custom middlewares
-│   └── logger.js   # An Example of a possible middleware
+│   └── example.js
 ├── routes.js        # Route definitions
 ├── app.js           # Server initialization
 └── package.json     # Project metadata and dependencies
 ```
 
-> The homepage already comes with an HTML+CSS welcome screen inspired by React's first page.
+---
 
-## 🚀 CLI Usage
+## 🚀 Features
 
-The Kaelum CLI helps you create projects in seconds:
+Kaelum exposes simple utilities that make it easy to build a web server:
+
+```js
+const kaelum = require('kaelum');
+const app = kaelum();
+```
+
+### 🌐 `addRoute(path, handlers)`
+
+Add routes with GET, POST, PUT, DELETE handlers in one place.
+
+```js
+addRoute('/home', {
+  get: (req, res) => res.send('GET: Welcome!'),
+  post: (req, res) => res.send('POST: Data received!')
+});
+```
+
+### 🔐 `setMiddleware(middleware)`
+
+Globally apply middleware to all routes.
+
+```js
+setMiddleware(require('helmet')());
+```
+
+### 🚀 `start(port)`
+
+Start the server.
+
+```js
+start(3000);
+```
+
+---
+
+## 👨‍💻 Local Development (for contributors)
+
+If you want to test or improve Kaelum locally:
+
+```bash
+git clone https://github.com/seu-usuario/kaelum.git
+cd kaelum
+npm link
+```
+
+Now you can run the CLI from anywhere:
 
 ```bash
 npx kaelum create
 ```
 
-You'll be prompted to choose a template (currently only "web" is available). It will scaffold a ready-to-run project using the Kaelum structure.
+---
 
-Then:
-
-```bash
-cd my-project
-npm install
-npm link kaelum
-npm start
-```
-
-## 🔮 Future Roadmap
-
-* API template support
-* Advanced configuration with `setConfig`
-* Validation helpers
-* JWT Authentication module
-* File-based routing (optional)
-
-## 🤝 Contributing
-
-> Contribution guidelines will be added soon. Until then, feel free to fork and explore!
-
-## 📌 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
