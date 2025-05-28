@@ -1,17 +1,15 @@
 {
-  "name": "kaelum-web-app",
+  "name": "my-web-app",
   "version": "1.0.0",
-  "description": "A starter web app powered by Kaelum framework.",
+  "description": "Project generated with Kaelum framework.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "keywords": ["kaelum", "framework", "express", "web"],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "helmet": "^7.0.0",
-    "kaelum": "file:../../" 
-  }
+    "kaelum": "^1.0.0"
+  },
+  "license": "MIT"
 }
