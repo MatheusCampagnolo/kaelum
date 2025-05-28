@@ -3,7 +3,7 @@ const logger = require("./middlewares/logger");
 function Routes(app) {
   app.addRoute("/", {
     get: (req, res) => {
-      res.sendFile("index.html", { root: __dirname });
+      res.sendFile("views/index.html", { root: __dirname });
     },
     post: (req, res) => res.send("POST: Dados recebidos na página inicial."),
   });
