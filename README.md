@@ -96,7 +96,7 @@ start(3000);
 If you want to test or improve Kaelum locally:
 
 ```bash
-git clone https://github.com/seu-usuario/kaelum.git
+git clone https://github.com/MatheusCampagnolo/kaelum.git
 cd kaelum
 npm link
 ```
