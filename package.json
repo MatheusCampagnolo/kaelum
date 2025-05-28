@@ -1,7 +1,7 @@
 {
   "name": "kaelum",
-  "version": "0.0.1",
-  "description": "A minimalist Node.js framework for web pages and APIs",
+  "version": "1.0.0",
+  "description": "A minimalist Node.js framework for building web pages and APIs with simplicity and speed.",
   "main": "index.js",
   "exports": {
     ".": "./index.js"
@@ -14,15 +14,21 @@
   },
   "keywords": [
     "framework",
-    "node",
+    "nodejs",
     "express",
     "cli",
-    "kaelum"
+    "kaelum",
+    "api",
+    "web",
+    "minimal",
+    "starter"
   ],
   "author": "Matheus Campagnolo",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "cors": "^2.8.5",
     "fs-extra": "^11.3.0",
     "inquirer": "^12.6.0"
   }
