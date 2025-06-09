@@ -1,8 +1,8 @@
 const express = require('express');
-const { start } = require('./core/start');
-const { addRoute } = require('./core/addRoute');
-const { setMiddleware } = require('./core/setMiddleware');
-const { setConfig } = require('./core/setConfig');
+const start = require('./core/start');
+const addRoute = require('./core/addRoute');
+const setMiddleware = require('./core/setMiddleware');
+const setConfig = require('./core/setConfig');
 
 function createApp() {
   const app = express();

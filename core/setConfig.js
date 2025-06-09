@@ -27,4 +27,4 @@ function setConfig(app, options = {}) {
   // - options.port
 }
 
-module.exports = { setConfig };
+module.exports = setConfig;

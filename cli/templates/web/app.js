@@ -1,10 +1,5 @@
 const kaelum = require("kaelum");
-const logger = require("./middlewares/logger");
-
 const app = kaelum();
-
-// Middlewares globais (aplicados a todas as rotas)
-app.setMiddleware([logger]);
 
 // SetConfig para aplicar configurações de segurança e middlewares
 app.setConfig({
