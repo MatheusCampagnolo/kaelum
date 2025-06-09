@@ -10,12 +10,14 @@ const helmet = require("helmet");
  */
 function setConfig(app, options = {}) {
   if (options.cors) {
-    app.use(cors());
+    const corsOpts = options.cors === true ? {} : options.cors;
+    app.use(cors(corsOpts));
     console.log("🛡️  CORS ativado.");
   }
 
   if (options.helmet) {
-    app.use(helmet());
+    const helmetOpts = options.helmet === true ? {} : options.helmet;
+    app.use(helmet(helmetOpts));
     console.log("🛡️  Helmet ativado.");
   }
 
