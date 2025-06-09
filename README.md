@@ -1,6 +1,6 @@
 # Kaelum
 
-**Kaelum** is a minimalist Node.js framework designed to simplify the creation of web pages and REST APIs, especially for beginners. Inspired by Python's clean syntax and powered by Express.js, Kaelum automates project setup and server configuration with an intuitive CLI.
+**Kaelum** is a minimalist Node.js framework designed to simplify the creation of web pages and REST APIs, especially for beginners and students. Inspired by Python's clean syntax and powered by Express.js, Kaelum automates project setup and server configuration with an intuitive CLI.
 
 ## 📦 Installation
 
@@ -9,6 +9,13 @@ You can create a new project with Kaelum using:
 ```bash
 npx kaelum create
 ````
+
+This command initializes a Kaelum project with a pre-configured structure based on the MVC model, including:
+
+* Static file serving
+* Template-ready HTML/CSS homepage
+* Built-in route system
+* Public folder and initial structure
 
 Then install dependencies and start your app:
 
@@ -80,6 +87,19 @@ Globally apply middleware to all routes.
 ```js
 setMiddleware(require('helmet')());
 ```
+
+### ⚙️ `setConfig(options)`
+
+You can enable common configurations using `setConfig`:
+
+```js
+app.setConfig({
+  cors: true,
+  helmet: true,
+});
+```
+
+Internally, Kaelum will automatically load and apply `cors` and `helmet` if enabled.
 
 ### 🚀 `start(port)`
 
