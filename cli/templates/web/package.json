@@ -7,7 +7,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "kaelum": "^1.0.0"
+    "kaelum": "^1.1.0"
   },
   "license": "MIT"
 }
