@@ -28,13 +28,6 @@ async function createProject() {
   const targetDir = path.resolve(process.cwd(), projectName);
   const templateDir = path.join(templatesDir, template);
 
-  if (template === "api") {
-    console.log(
-      '\n📦 O template API ainda está em desenvolvimento. Por favor, escolha o template "web".'
-    );
-    return;
-  }
-
   if (fs.existsSync(targetDir)) {
     console.error(
       `\n❌ A pasta "${projectName}" já existe. Escolha outro nome ou apague a pasta existente.`

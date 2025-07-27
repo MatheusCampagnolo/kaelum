@@ -1,0 +1,12 @@
+const kaelum = require("kaelum");
+const app = kaelum();
+
+app.setConfig({
+  cors: true,
+  helmet: true
+});
+
+const routes = require("./routes");
+routes(app);
+
+app.start(3000);
