@@ -41,7 +41,7 @@ npm start
 
 ## 📁 Web Template Structure
 
-After running `npx kaelum create`, the web template structure looks like this:
+After running `npx kaelum create` using the WEB template, the structure looks like this:
 
 ```
 my-web-app/
@@ -56,6 +56,23 @@ my-web-app/
 ├── routes.js        # Route definitions
 ├── app.js           # Server initialization
 └── package.json     # Project metadata and dependencies
+```
+
+---
+
+## 📁 API Template Structure
+
+After running `npx kaelum create` using the API template, the structure looks like this:
+
+```
+my-api-app/
+├── controllers/
+│   └── userController.js
+├── middlewares/
+│   └── logger.js
+├── routes.js
+├── app.js
+├── package.json
 ```
 
 ---
