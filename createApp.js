@@ -5,13 +5,13 @@
 // - wraps core/setConfig to support toggles via setConfig({ ... })
 // - exposes existing core helpers (start, addRoute, setMiddleware) bound to the app
 
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 
-const start = require('./core/start');
-const addRoute = require('./core/addRoute');
-const setMiddleware = require('./core/setMiddleware');
-const coreSetConfig = require('./core/setConfig');
+const start = require("./core/start");
+const addRoute = require("./core/addRoute");
+const setMiddleware = require("./core/setMiddleware");
+const coreSetConfig = require("./core/setConfig");
 
 function createApp() {
   const app = express();
@@ -20,7 +20,7 @@ function createApp() {
   app.locals.kaelumConfig = app.locals.kaelumConfig || {};
 
   // --- Default static middleware (store reference so setConfig can replace it) ---
-  const defaultStatic = express.static(path.join(process.cwd(), 'public'));
+  const defaultStatic = express.static(path.join(process.cwd(), "public"));
   app.locals._kaelum_static = defaultStatic;
   app.use(defaultStatic);
 
@@ -44,11 +44,11 @@ function createApp() {
       // fallback merge and persist locally
       const prev = app.locals.kaelumConfig || {};
       app.locals.kaelumConfig = Object.assign({}, prev, options);
-      app.set('kaelum:config', app.locals.kaelumConfig);
+      app.set("kaelum:config", app.locals.kaelumConfig);
     }
 
     // read merged config
-    const cfg = app.get('kaelum:config') || app.locals.kaelumConfig || {};
+    const cfg = app.get("kaelum:config") || app.locals.kaelumConfig || {};
 
     // Body parser toggle handled by core.setConfig (which manipulates app._router.stack)
     // (core.setConfig already implements removal/add as we updated)
@@ -58,23 +58,37 @@ function createApp() {
 
   // convenience getter
   app.getKaelumConfig = function () {
-    return app.get('kaelum:config') || app.locals.kaelumConfig || {};
+    return app.get("kaelum:config") || app.locals.kaelumConfig || {};
+  };
+
+  // convenience wrapper to set static folder directly
+  app.static = function (dir) {
+    if (!dir) {
+      // if no dir passed, act as getter
+      return app.getKaelumConfig().static || null;
+    }
+    return app.setConfig({ static: dir });
+  };
+
+  // convenience method to remove static middleware
+  app.removeStatic = function () {
+    return app.setConfig({ static: false });
   };
 
   // --- bind existing core helpers to the app --- //
-  if (typeof start === 'function') {
+  if (typeof start === "function") {
     app.start = function (port, cb) {
       return start(app, port, cb);
     };
   }
 
-  if (typeof addRoute === 'function') {
+  if (typeof addRoute === "function") {
     app.addRoute = function (routePath, handlers) {
       return addRoute(app, routePath, handlers);
     };
   }
 
-  if (typeof setMiddleware === 'function') {
+  if (typeof setMiddleware === "function") {
     app.setMiddleware = function (middleware) {
       return setMiddleware(app, middleware);
     };

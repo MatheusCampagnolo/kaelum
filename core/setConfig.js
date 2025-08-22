@@ -53,19 +53,30 @@ function setConfig(app, options = {}) {
     }
   }
 
-  // --- Static replacement ---
-  if (Object.prototype.hasOwnProperty.call(options, "static") && options.static) {
-    // remove previous static middleware (default or previous set)
-    if (app.locals._kaelum_static) {
-      removeMiddlewareByRef(app, app.locals._kaelum_static);
-    }
+  // --- Static replacement / removal ---
+  if (Object.prototype.hasOwnProperty.call(options, "static")) {
+    // if explicitly false -> remove any existing static middleware
+    if (options.static === false) {
+      if (app.locals._kaelum_static) {
+        removeMiddlewareByRef(app, app.locals._kaelum_static);
+        app.locals._kaelum_static = null;
+        console.log("📁 Kaelum: static middleware removed.");
+      } else {
+        console.log("📁 Kaelum: no static middleware to remove.");
+      }
+    } else if (options.static) {
+      // remove previous static middleware (default or previous set)
+      if (app.locals._kaelum_static) {
+        removeMiddlewareByRef(app, app.locals._kaelum_static);
+      }
 
-    const staticPath = path.resolve(process.cwd(), options.static);
-    const newStatic = express.static(staticPath);
-    // store new static reference
-    app.locals._kaelum_static = newStatic;
-    app.use(newStatic);
-    console.log(`📁 Static files served from: ${staticPath}`);
+      const staticPath = path.resolve(process.cwd(), options.static);
+      const newStatic = express.static(staticPath);
+      // store new static reference
+      app.locals._kaelum_static = newStatic;
+      app.use(newStatic);
+      console.log(`📁 Static files served from: ${staticPath}`);
+    }
   }
 
   // --- CORS ---
@@ -76,7 +87,10 @@ function setConfig(app, options = {}) {
   }
 
   // --- Helmet ---
-  if (Object.prototype.hasOwnProperty.call(options, "helmet") && options.helmet) {
+  if (
+    Object.prototype.hasOwnProperty.call(options, "helmet") &&
+    options.helmet
+  ) {
     const helmetOpts = options.helmet === true ? {} : options.helmet;
     app.use(helmet(helmetOpts));
     console.log("🛡️  Helmet activated.");
