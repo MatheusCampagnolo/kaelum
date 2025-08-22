@@ -3,6 +3,7 @@
 // - merges provided options with existing runtime config
 // - persists merged config on app (app.set('kaelum:config', cfg))
 // - supports toggling bodyParser (removes or re-adds parsers tracked in app.locals)
+// - supports replacing the default static middleware tracked in app.locals._kaelum_static
 // - applies cors and helmet when requested
 
 const cors = require("cors");
@@ -25,18 +26,6 @@ function isMiddlewarePresent(app, fnRef) {
   return app._router.stack.some((layer) => layer && layer.handle === fnRef);
 }
 
-/**
- * Apply configuration to Kaelum app instance.
- * @param {Object} app - Express app instance (Kaelum wrapper)
- * @param {Object} options - configuration options
- * @param {boolean|object} [options.cors] - enable CORS (true or options)
- * @param {boolean|object} [options.helmet] - enable Helmet (true or options)
- * @param {boolean} [options.bodyParser] - enable/disable default body parsing
- * @param {string} [options.static] - folder to serve static files from
- * @param {boolean|object} [options.logs] - enable logging (morgan)
- * @param {number} [options.port] - store desired port in config (start reads it)
- * @returns {Object} merged config
- */
 function setConfig(app, options = {}) {
   // Merge existing config with new options
   const prev = app.get("kaelum:config") || app.locals.kaelumConfig || {};
@@ -47,18 +36,14 @@ function setConfig(app, options = {}) {
   app.set("kaelum:config", cfg);
 
   // --- Body parser toggle ---
-  // We rely on app.locals._kaelum_bodyparsers being set by createApp
   if (Object.prototype.hasOwnProperty.call(options, "bodyParser")) {
     const wanted = options.bodyParser;
     const parsers = app.locals._kaelum_bodyparsers || [];
 
     if (wanted === false) {
-      // remove all parser references recorded earlier
       parsers.forEach((fn) => removeMiddlewareByRef(app, fn));
-      // log for visibility
       console.log("⚙️  Kaelum: bodyParser disabled by configuration.");
     } else if (wanted === true) {
-      // re-add them if missing
       parsers.forEach((fn) => {
         if (!isMiddlewarePresent(app, fn)) {
           app.use(fn);
@@ -66,6 +51,21 @@ function setConfig(app, options = {}) {
       });
       console.log("⚙️  Kaelum: bodyParser enabled by configuration.");
     }
+  }
+
+  // --- Static replacement ---
+  if (Object.prototype.hasOwnProperty.call(options, "static") && options.static) {
+    // remove previous static middleware (default or previous set)
+    if (app.locals._kaelum_static) {
+      removeMiddlewareByRef(app, app.locals._kaelum_static);
+    }
+
+    const staticPath = path.resolve(process.cwd(), options.static);
+    const newStatic = express.static(staticPath);
+    // store new static reference
+    app.locals._kaelum_static = newStatic;
+    app.use(newStatic);
+    console.log(`📁 Static files served from: ${staticPath}`);
   }
 
   // --- CORS ---
@@ -80,14 +80,6 @@ function setConfig(app, options = {}) {
     const helmetOpts = options.helmet === true ? {} : options.helmet;
     app.use(helmet(helmetOpts));
     console.log("🛡️  Helmet activated.");
-  }
-
-  // --- Static (optional) ---
-  if (Object.prototype.hasOwnProperty.call(options, "static") && options.static) {
-    // serve static folder relative to project root
-    const staticPath = path.resolve(process.cwd(), options.static);
-    app.use(express.static(staticPath));
-    console.log(`📁 Static files served from: ${staticPath}`);
   }
 
   // --- Logs (optional; uses morgan if available) ---
@@ -107,7 +99,7 @@ function setConfig(app, options = {}) {
     }
   }
 
-  // keep merged config available
+  // --- keep merged config available ---
   return cfg;
 }
 
