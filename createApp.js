@@ -3,7 +3,8 @@
 // - enables JSON and URL-encoded body parsing by default
 // - stores references to parsers and static middleware so they can be replaced by setConfig
 // - wraps core/setConfig to support toggles via setConfig({ ... })
-// - exposes existing core helpers (start, addRoute, setMiddleware) bound to the app
+// - exposes existing core helpers (start, addRoute, setMiddleware, apiRoute)
+// - exposes error handler helper app.useErrorHandler()
 
 const express = require("express");
 const path = require("path");
@@ -13,6 +14,7 @@ const addRoute = require("./core/addRoute");
 const apiRoute = require("./core/apiRoute");
 const setMiddleware = require("./core/setMiddleware");
 const coreSetConfig = require("./core/setConfig");
+const { errorHandler } = require("./core/errorHandler");
 
 function createApp() {
   const app = express();
@@ -52,7 +54,6 @@ function createApp() {
     const cfg = app.get("kaelum:config") || app.locals.kaelumConfig || {};
 
     // Body parser toggle handled by core.setConfig (which manipulates app._router.stack)
-    // (core.setConfig already implements removal/add as we updated)
 
     return cfg;
   };
@@ -76,7 +77,19 @@ function createApp() {
     return app.setConfig({ static: false });
   };
 
-  // --- bind existing core helpers to the app --- //
+  // ---------------------------
+  // middleware utility helpers
+  // ---------------------------
+
+  // remove middleware by matching the function reference from the express internal stack
+  function removeMiddlewareByFn(appInstance, fn) {
+    if (!appInstance || !appInstance._router || !Array.isArray(appInstance._router.stack)) return;
+    appInstance._router.stack = appInstance._router.stack.filter((layer) => layer.handle !== fn);
+  }
+
+  // ---------------------------
+  // bind existing core helpers to the app
+  // ---------------------------
   if (typeof start === "function") {
     app.start = function (port, cb) {
       return start(app, port, cb);
@@ -96,10 +109,37 @@ function createApp() {
   }
 
   if (typeof setMiddleware === "function") {
-    app.setMiddleware = function (middleware) {
-      return setMiddleware(app, middleware);
+    app.setMiddleware = function (middlewareOrPath, maybeMiddleware) {
+      // forward call to core/setMiddleware - keep signature flexible
+      if (arguments.length === 2) {
+        return setMiddleware(app, middlewareOrPath, maybeMiddleware);
+      }
+      return setMiddleware(app, middlewareOrPath);
     };
   }
+
+  // ---------------------------
+  // Error handler exposure
+  // ---------------------------
+  // Expose a convenience method to register Kaelum's generic error handler.
+  // Accepts same options as errorHandler factory: { exposeStack: boolean }
+  app.useErrorHandler = function (options = {}) {
+    // If an error handler was previously registered by Kaelum, remove it first.
+    if (app.locals && app.locals._kaelum_errorhandler) {
+      removeMiddlewareByFn(app, app.locals._kaelum_errorhandler);
+      app.locals._kaelum_errorhandler = null;
+    }
+
+    const mw = errorHandler(options);
+    // store reference and install as final middleware
+    if (!app.locals) app.locals = {};
+    app.locals._kaelum_errorhandler = mw;
+    app.use(mw);
+    return app;
+  };
+
+  // alias for convenience
+  app.errorHandler = app.useErrorHandler;
 
   return app;
 }
