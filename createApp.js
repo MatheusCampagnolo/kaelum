@@ -16,6 +16,7 @@ const setMiddleware = require("./core/setMiddleware");
 const coreSetConfig = require("./core/setConfig");
 const { errorHandler } = require("./core/errorHandler");
 const registerHealth = require("./core/healthCheck");
+const redirect = require("./core/redirect");
 
 function createApp() {
   const app = express();
@@ -130,6 +131,12 @@ function createApp() {
     app.healthCheck = function (routePath = "/health") {
       registerHealth(app, routePath);
       return app;
+    };
+  }
+
+  if (typeof redirect === "function") {
+    app.redirect = function (from, to, status = 302) {
+      return redirect(app, from, to, status);
     };
   }
 
