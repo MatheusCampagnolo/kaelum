@@ -10,6 +10,7 @@ const path = require("path");
 
 const start = require("./core/start");
 const addRoute = require("./core/addRoute");
+const apiRoute = require("./core/apiRoute");
 const setMiddleware = require("./core/setMiddleware");
 const coreSetConfig = require("./core/setConfig");
 
@@ -85,6 +86,12 @@ function createApp() {
   if (typeof addRoute === "function") {
     app.addRoute = function (routePath, handlers) {
       return addRoute(app, routePath, handlers);
+    };
+  }
+
+  if (typeof apiRoute === "function") {
+    app.apiRoute = function (resource, handlers) {
+      return apiRoute(app, resource, handlers);
     };
   }
 
