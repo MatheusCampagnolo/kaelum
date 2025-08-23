@@ -1,26 +1,27 @@
 // core/start.js
-// start(app, port?, callback?) - read port from Kaelum config if not provided
+// Start helper for Kaelum: uses port passed or reads from Kaelum config, or falls back to 3000.
 
 function start(app, port, cb) {
-  // allow start(app) or start(app, port) or start(app, port, cb)
-  // If port is not a number, shift arguments
-  let listenPort = port;
-  let callback = cb;
+  if (!app) throw new Error("start requires an app instance");
 
-  if (typeof port === 'function') {
-    callback = port;
-    listenPort = undefined;
+  // If port omitted, try to read from Kaelum config
+  let usePort = port;
+  if (typeof usePort === "undefined" || usePort === null) {
+    const cfg = app.get("kaelum:config") || app.locals.kaelumConfig || {};
+    if (cfg && cfg.port) usePort = cfg.port;
   }
+  // fallback default
+  if (typeof usePort === "undefined" || usePort === null) usePort = 3000;
 
-  const cfg = app.get('kaelum:config') || app.locals.kaelumConfig || {};
-  if (typeof listenPort !== 'number') {
-    listenPort = cfg.port || process.env.PORT || 3000;
-  }
-
-  const server = app.listen(listenPort, () => {
-    console.log(`Server running on port ${listenPort}`);
-    if (typeof callback === 'function') callback();
+  // create server and store reference for possible later use
+  const server = app.listen(usePort, () => {
+    console.log(`🚀 Kaelum server running on port ${usePort}`);
+    if (typeof cb === "function") cb();
   });
+
+  // keep reference if needed
+  if (!app.locals) app.locals = {};
+  app.locals._kaelum_server = server;
 
   return server;
 }
