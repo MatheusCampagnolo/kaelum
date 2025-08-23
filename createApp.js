@@ -15,6 +15,7 @@ const apiRoute = require("./core/apiRoute");
 const setMiddleware = require("./core/setMiddleware");
 const coreSetConfig = require("./core/setConfig");
 const { errorHandler } = require("./core/errorHandler");
+const registerHealth = require("./core/healthCheck");
 
 function createApp() {
   const app = express();
@@ -83,8 +84,15 @@ function createApp() {
 
   // remove middleware by matching the function reference from the express internal stack
   function removeMiddlewareByFn(appInstance, fn) {
-    if (!appInstance || !appInstance._router || !Array.isArray(appInstance._router.stack)) return;
-    appInstance._router.stack = appInstance._router.stack.filter((layer) => layer.handle !== fn);
+    if (
+      !appInstance ||
+      !appInstance._router ||
+      !Array.isArray(appInstance._router.stack)
+    )
+      return;
+    appInstance._router.stack = appInstance._router.stack.filter(
+      (layer) => layer.handle !== fn
+    );
   }
 
   // ---------------------------
@@ -115,6 +123,13 @@ function createApp() {
         return setMiddleware(app, middlewareOrPath, maybeMiddleware);
       }
       return setMiddleware(app, middlewareOrPath);
+    };
+  }
+
+  if (typeof registerHealth === "function") {
+    app.healthCheck = function (routePath = "/health") {
+      registerHealth(app, routePath);
+      return app;
     };
   }
 
