@@ -1,27 +1,32 @@
-const logger = require("./middlewares/logger");
+// routes.js - example route declarations using Kaelum API
+const path = require("path");
 
-function Routes(app) {
+module.exports = function (app) {
+  // Home: serve the index.html from /views
   app.addRoute("/", {
     get: (req, res) => {
-      res.sendFile("views/index.html", { root: __dirname });
+      // send the static HTML file from the views folder
+      res.sendFile(path.join(process.cwd(), "views", "index.html"));
     },
-    post: (req, res) => res.send("POST: Dados recebidos na página inicial."),
   });
 
+  // About page - simple text
   app.addRoute("/about", {
-    get: (req, res) => res.send("About page"),
+    get: (req, res) => {
+      res.send("About Kaelum — a minimal framework scaffolded by the CLI.");
+    },
   });
 
-  // Rota "/secure" com middleware aplicado diretamente
-  app.addRoute("/secure", {
-    get: [
-      logger,
-      (req, res) => {
-        res.send("GET: Área segura! Middleware foi executado.");
-      },
-    ],
-  });
-  
-}
+  // Example route using per-path middleware (logger)
+  // The middleware is mounted on '/protected' and the route uses it.
+  const logger = require("./middlewares/logger");
+  app.setMiddleware("/protected", logger);
 
-module.exports = Routes;
+  app.addRoute("/protected", {
+    get: (req, res) => {
+      res.send(
+        "This route is protected by a simple request logger middleware."
+      );
+    },
+  });
+};

@@ -1,13 +1,23 @@
 {
-  "name": "my-web-app",
-  "version": "1.0.0",
-  "description": "Project generated with Kaelum framework.",
-  "main": "app.js",
+  "name": "kaelum-web-app",
+  "version": "0.1.0",
+  "description": "Exemplo de app gerado pela CLI Kaelum (web template)",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
+  "keywords": [
+    "kaelum",
+    "web"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "kaelum": "^1.1.0"
+    "kaelum": "^1.3.0",
+    "cors": "^2.8.5",
+    "helmet": "^6.0.0"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }

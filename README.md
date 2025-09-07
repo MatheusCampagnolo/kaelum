@@ -1,151 +1,248 @@
 # Kaelum
 
-**Kaelum** is a minimalist Node.js framework designed to simplify the creation of web pages and REST APIs, especially for beginners and students. Inspired by Python's clean syntax and powered by Express.js, Kaelum automates project setup and server configuration with an intuitive CLI.
+**Kaelum.JS** — Minimalist Node.js framework to simplify creation of web pages and REST APIs.  
+Designed for students and developers who want a fast, opinionated project scaffold and a small, friendly API that encapsulates common Express.js boilerplate.
 
-## 📦 Installation
+---
 
-You can create a new project with Kaelum using:
+## 🚀 Quick start
+
+Create a new project (interactive):
 
 ```bash
 npx kaelum create
 ````
 
-This command initializes a Kaelum project with a pre-configured structure based on the MVC model, including:
-
-* Static file serving
-* Template-ready HTML/CSS homepage
-* Built-in route system
-* Public folder and initial structure
-
-Then install dependencies and start your app:
+Or create non-interactively (project name + template):
 
 ```bash
-cd my-project
+npx kaelum create my-app --template web
+# or
+npx kaelum create my-api --template api
+```
+
+Then:
+
+```bash
+cd my-app
 npm install
 npm start
 ```
 
-> **Note:** No need to install Kaelum globally. `npx` handles it automatically!
+> No need to install Kaelum globally — `npx` handles execution.
 
 ---
 
-## 🧠 Why Kaelum?
+## 📦 What Kaelum provides
 
-* 📂 Minimalist MVC folder structure
-* ⚙️ Auto-configured Express setup
-* 🔒 Built-in support for CORS and Helmet
-* 🧱 Easy route management
-* 🧪 Great for learning and building quick prototypes
+* CLI that scaffolds a ready-to-run project (Web or API template) using an opinionated **MVC** structure.
+* Thin abstraction layer over **Express.js** that:
+
+  * automates JSON / URL-encoded parsing by default,
+  * automatically configures common security middlewares via `setConfig` (CORS, Helmet),
+  * exposes a small, easy-to-learn API for routes, middleware and configuration.
+* Small set of helpers for common tasks: `start`, `addRoute`, `apiRoute`, `setConfig`, `static`, `redirect`, `healthCheck`, `useErrorHandler`, and more.
+
+Kaelum aims to reduce the initial setup burden while keeping flexibility for advanced users.
 
 ---
 
-## 📁 Web Template Structure
+## 📁 Template structures
 
-After running `npx kaelum create` using the WEB template, the structure looks like this:
+### Web template (created by `npx kaelum create <name>` with template `web`)
 
 ```
 my-web-app/
-├── public/          # Static files (e.g., CSS, JS)
+├── public/          # Static files (CSS, JS)
 │   └── style.css
 ├── views/           # HTML templates
 │   └── index.html
-├── controllers/     # Page controller logic
+├── controllers/     # Controller logic (MVC)
 │   └── .gitkeep
 ├── middlewares/     # Custom middlewares
-│   └── example.js
-├── routes.js        # Route definitions
-├── app.js           # Server initialization
-└── package.json     # Project metadata and dependencies
+│   └── logger.js
+├── routes.js        # Route definitions (example uses Kaelum helpers)
+├── app.js           # Server initialization (uses Kaelum API)
+└── package.json
 ```
 
----
-
-## 📁 API Template Structure
-
-After running `npx kaelum create` using the API template, the structure looks like this:
+### API template (`--template api`)
 
 ```
 my-api-app/
 ├── controllers/
-│   └── userController.js
+│   └── usersController.js
 ├── middlewares/
-│   └── logger.js
+│   └── authMock.js
 ├── routes.js
 ├── app.js
-├── package.json
+└── package.json
 ```
 
 ---
 
-## 🚀 Features
+## 🧩 Core API (examples — CommonJS)
 
-Kaelum exposes simple utilities that make it easy to build a web server:
+> Kaelum exposes a factory — use `require('kaelum')` and call it to get an app instance:
 
 ```js
 const kaelum = require('kaelum');
 const app = kaelum();
 ```
 
-### 🌐 `addRoute(path, handlers)`
+### `app.setConfig(options)`
 
-Add routes with GET, POST, PUT, DELETE handlers in one place.
-
-```js
-addRoute('/home', {
-  get: (req, res) => res.send('GET: Welcome!'),
-  post: (req, res) => res.send('POST: Data received!')
-});
-```
-
-### 🔐 `setMiddleware(middleware)`
-
-Globally apply middleware to all routes.
-
-```js
-setMiddleware(require('helmet')());
-```
-
-### ⚙️ `setConfig(options)`
-
-You can enable common configurations using `setConfig`:
+Enable/disable common features:
 
 ```js
 app.setConfig({
-  cors: true,
-  helmet: true,
+  cors: true,         // apply CORS (requires cors package in dependencies)
+  helmet: true,       // apply Helmet
+  static: "public",   // serve static files from "public"
+  bodyParser: true,   // default: enabled (JSON + urlencoded)
+  logs: false,        // enable request logging via morgan (if installed)
+  port: 3000          // prefered port (used when calling app.start() without port)
 });
 ```
 
-Internally, Kaelum will automatically load and apply `cors` and `helmet` if enabled.
+* `setConfig` persists settings to the Kaelum config and will install/remove Kaelum-managed middlewares.
+* Kaelum enables JSON/urlencoded parsing by default so beginners won't forget to parse request bodies.
 
-### 🚀 `start(port)`
+---
 
-Start the server.
+### `app.start(port, callback)`
+
+Starts the HTTP server. If `port` is omitted, Kaelum reads `port` from `setConfig` or falls back to `3000`.
 
 ```js
-start(3000);
+app.start(3000, () => console.log('Running'));
 ```
 
 ---
 
-## 👨‍💻 Local Development (for contributors)
+### `app.addRoute(path, handlers)` and `app.apiRoute(resource, handlers)`
 
-If you want to test or improve Kaelum locally:
+Register routes easily:
+
+```js
+app.addRoute('/home', {
+  get: (req, res) => res.send('Welcome!'),
+  post: (req, res) => res.send('Posted!')
+});
+
+// apiRoute builds RESTy resources with nested subpaths:
+app.apiRoute('users', {
+  get: listUsers,
+  post: createUser,
+  '/:id': {
+    get: getUserById,
+    put: updateUser,
+    delete: deleteUser
+  }
+});
+```
+
+`addRoute` also accepts a single handler function (assumed `GET`).
+
+---
+
+### `app.setMiddleware(...)`
+
+Flexible helper to register middleware(s):
+
+```js
+// single middleware
+app.setMiddleware(require('helmet')());
+
+// array of middlewares
+app.setMiddleware([mw1, mw2]);
+
+// mount middleware on a path
+app.setMiddleware('/admin', authMiddleware);
+```
+
+---
+
+### `app.redirect(from, to, status)`
+
+Register a redirect route:
+
+```js
+app.redirect('/old-url', '/new-url', 302);
+```
+
+---
+
+### `app.healthCheck(path = '/health')`
+
+Adds a health endpoint returning `{ status: 'OK', uptime, timestamp, pid }`.
+
+---
+
+### `app.useErrorHandler(options)`
+
+Attach Kaelum's default JSON error handler:
+
+```js
+app.useErrorHandler({ exposeStack: false });
+```
+
+It will return standardized JSON for errors and log server-side errors (5xx) to `console.error`.
+
+---
+
+## 🔧 Local development & contributing
+
+To develop Kaelum locally and test the CLI:
 
 ```bash
-git clone https://github.com/MatheusCampagnolo/kaelum.git
+# clone
+git clone https://github.com/<your-repo>/kaelum.git
 cd kaelum
+
+# install & link locally
+npm install
 npm link
-```
 
-Now you can run the CLI from anywhere:
-
-```bash
-npx kaelum create
+# from any folder you can now run the CLI
+npx kaelum create my-test --template web
+# or
+kaelum create my-test    # if linked globally
 ```
 
 ---
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📝 Why Kaelum?
+
+* Reduces repetitive boilerplate required to start Node/Express web projects.
+* Opinionated scaffolding (MVC) helps beginners adopt better structure.
+* Keeps a small API surface: easy to teach and document.
+* Extensible — `setConfig` and middleware helpers allow adding features without exposing Express internals.
+
+---
+
+## ✅ Current status
+
+> Kaelum is under active development. The CLI scaffolds web and API templates and the framework already includes the MVP helpers (`start`, `addRoute`, `apiRoute`, `setConfig`, `static`, `redirect`, `healthCheck`, `useErrorHandler`) and security toggles for `cors` and `helmet`.
+
+---
+
+## 📚 Links
+
+* GitHub: `https://github.com/MatheusCampagnolo/kaelum`
+* npm: `https://www.npmjs.com/package/kaelum`
+
+---
+
+## 🧾 License
+
+MIT — see [LICENSE](LICENSE).
+
+---
+
+## ✍️ Notes for maintainers
+
+* Templates include `package.json` configured as `commonjs` for now (uses `require`/`module.exports`).
+* Update template `package.json` dependencies to reference Kaelum version when releasing new npm versions.
+* We plan to add full JSDoc for the public API, unit tests (Jest + Supertest) and a docs site in future iterations.
