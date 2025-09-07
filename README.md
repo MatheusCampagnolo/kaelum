@@ -71,9 +71,9 @@ my-web-app/
 ```
 my-api-app/
 ├── controllers/
-│   └── userController.js
+│   └── usersController.js
 ├── middlewares/
-│   └── logger.js
+│   └── authMock.js
 ├── routes.js
 ├── app.js
 └── package.json
