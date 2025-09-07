@@ -1,4 +1,4 @@
-// createApp.js (root)
+// createApp.js
 // Kaelum factory: creates an Express app with Kaelum helpers
 // - enables JSON and URL-encoded body parsing by default
 // - stores references to parsers and static middleware so they can be replaced by setConfig
@@ -21,8 +21,11 @@ const redirect = require("./core/redirect");
 function createApp() {
   const app = express();
 
-  // store runtime config in locals
+  // ensure locals object and initial persisted config
+  app.locals = app.locals || {};
   app.locals.kaelumConfig = app.locals.kaelumConfig || {};
+  // persist baseline config so app.get("kaelum:config") is always available
+  app.set("kaelum:config", app.locals.kaelumConfig);
 
   // --- Default static middleware (store reference so setConfig can replace it) ---
   const defaultStatic = express.static(path.join(process.cwd(), "public"));
@@ -42,9 +45,14 @@ function createApp() {
 
   // --- wrapper for core.setConfig ---
   app.setConfig = function (options = {}) {
-    // call core setConfig if available (it will persist merged config)
+    // call core setConfig if available (it should persist merged config)
     try {
-      coreSetConfig(app, options);
+      const merged = coreSetConfig(app, options);
+      // ensure merged config is persisted locally as well
+      if (merged && typeof merged === "object") {
+        app.locals.kaelumConfig = merged;
+        app.set("kaelum:config", merged);
+      }
     } catch (e) {
       // fallback merge and persist locally
       const prev = app.locals.kaelumConfig || {};
@@ -56,7 +64,6 @@ function createApp() {
     const cfg = app.get("kaelum:config") || app.locals.kaelumConfig || {};
 
     // Body parser toggle handled by core.setConfig (which manipulates app._router.stack)
-
     return cfg;
   };
 
