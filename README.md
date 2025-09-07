@@ -197,7 +197,7 @@ To develop Kaelum locally and test the CLI:
 
 ```bash
 # clone
-git clone https://github.com/<your-repo>/kaelum.git
+git clone https://github.com/MatheusCampagnolo/kaelum.git
 cd kaelum
 
 # install & link locally
