@@ -11,5 +11,8 @@
     "vitepress": "^1.6.4",
     "vitepress-plugin-group-icons": "^1.6.3",
     "vue": "^3.5.21"
+  },
+  "overrides": {
+    "debug": "^4.3.4"
   }
 }
