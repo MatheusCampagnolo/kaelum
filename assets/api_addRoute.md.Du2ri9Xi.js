@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a}from"./chunks/framework.DALqws9A.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"api/addRoute.md","filePath":"api/addRoute.md"}'),o={name:"api/addRoute.md"};function d(r,s,c,n,p,i){return a(),t("div")}const f=e(o,[["render",d]]);export{m as __pageData,f as default};
