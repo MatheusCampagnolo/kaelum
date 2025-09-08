@@ -14,3 +14,8 @@ examples/
 # Ignore system files
 .DS_Store
 Thumbs.db
+
+# Exclude docs and vitepress files from published NPM package
+docs/
+.vitepress/
+docs-dist/

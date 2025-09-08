@@ -28,3 +28,7 @@ test/
 # Build/output (if we need in the future)
 dist/
 build/
+
+# vitepress build output
+.vitepress/dist
+docs/.vitepress/dist
