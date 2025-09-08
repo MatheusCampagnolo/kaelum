@@ -8,6 +8,7 @@ import {
 import path from "node:path";
 
 export default defineConfig({
+  base: "/kaelum/",
   title: "Kaelum",
   description: "Kaelum — Fast, minimalist framework for web apps & REST APIs",
   head: [
