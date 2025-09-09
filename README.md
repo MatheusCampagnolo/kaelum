@@ -245,4 +245,3 @@ MIT — see [LICENSE](LICENSE).
 
 * Templates include `package.json` configured as `commonjs` for now (uses `require`/`module.exports`).
 * Update template `package.json` dependencies to reference Kaelum version when releasing new npm versions.
-* We plan to add full JSDoc for the public API, unit tests (Jest + Supertest) and a docs site in future iterations.
