@@ -19,3 +19,5 @@ Thumbs.db
 docs/
 .vitepress/
 docs-dist/
+
+.github
