@@ -3,12 +3,42 @@ const inq = inquirer.default || inquirer;
 const path = require("path");
 const fs = require("fs-extra");
 const { copyTemplate } = require("./utils");
+const { spawn } = require("child_process");
 
 const templatesDir = path.resolve(__dirname, "templates");
 
 /**
+ * runInstall - runs `npm ci` if package-lock exists, otherwise `npm install`
+ * @param {string} cwd - target directory where install runs
+ * @returns {Promise<void>}
+ */
+function runInstall(cwd) {
+  return new Promise((resolve, reject) => {
+    const lockExists = fs.existsSync(path.join(cwd, "package-lock.json"));
+    const cmd = "npm";
+    const args = lockExists ? ["ci"] : ["install"];
+
+    // Spawn child process and inherit stdio so user sees progress
+    const child = spawn(cmd, args, {
+      cwd,
+      stdio: "inherit",
+      shell: process.platform === "win32", // improves compatibility on Windows
+    });
+
+    child.on("error", (err) => {
+      reject(err);
+    });
+
+    child.on("exit", (code) => {
+      if (code === 0) return resolve();
+      reject(new Error(`${cmd} ${args.join(" ")} exited with code ${code}`));
+    });
+  });
+}
+
+/**
  * createProject - create project from template
- * @param {Object} defaults - optional { projectName, template }
+ * @param {Object} defaults - optional { projectName, template, autoInstall }
  */
 async function createProject(defaults = {}) {
   console.log("🚀 Bem-vindo ao Kaelum CLI!");
@@ -47,9 +77,19 @@ async function createProject(defaults = {}) {
         },
         default: defaults.template || "web",
       },
+      {
+        type: "confirm",
+        name: "autoInstall",
+        message:
+          "Deseja que eu execute 'npm install' agora (recomendado)?",
+        default:
+          typeof defaults.autoInstall === "boolean"
+            ? defaults.autoInstall
+            : true,
+      },
     ]);
 
-    const { projectName, template } = answers;
+    const { projectName, template, autoInstall } = answers;
     const targetDir = path.resolve(process.cwd(), projectName);
     const templateDir = path.join(templatesDir, template);
 
@@ -76,7 +116,23 @@ async function createProject(defaults = {}) {
 
     console.log(`\n✅ Projeto "${projectName}" criado com sucesso!`);
     console.log(`➡️  Acesse a pasta: cd ${projectName}`);
-    console.log(`➡️  Inicie o projeto com: npm install && npm start\n`);
+
+    if (autoInstall) {
+      console.log("⬇️  Instalando dependências (npm)... (isso pode levar alguns minutos)");
+      try {
+        await runInstall(targetDir);
+        console.log("\n✅ Dependências instaladas com sucesso!");
+        console.log("➡️  Para iniciar o projeto, execute: npm start\n");
+      } catch (installErr) {
+        console.error(
+          "\n❌ Falha ao instalar dependências automaticamente:",
+          installErr.message || installErr
+        );
+        console.log(`➡️  Tente manualmente: cd ${projectName} && npm install`);
+      }
+    } else {
+      console.log(`➡️  Inicie o projeto com: cd ${projectName} && npm install && npm start\n`);
+    }
   } catch (err) {
     console.error("❌ Erro inesperado:", err.message || err);
   }
