@@ -1,16 +1,22 @@
-# Kaelum
+<div align="center">
+
+<h1>Kaelum</h1>
 
 [![npm version](https://img.shields.io/npm/v/kaelum)](https://www.npmjs.com/package/kaelum)
 [![Build Status](https://github.com/MatheusCampagnolo/kaelum/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/MatheusCampagnolo/kaelum/actions)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-online-blue)](https://matheuscampagnolo.github.io/kaelum/)
 
-**Kaelum.JS** — Minimalist Node.js framework to simplify creation of web pages and REST APIs.  
+**Kaelum.js** — Minimalist Node.js framework to simplify creation of web pages and REST APIs.  
 Designed for students and developers who want a fast, opinionated project scaffold and a small, friendly API that encapsulates common Express.js boilerplate.
 
 👉 [**Read the full documentation here**](https://matheuscampagnolo.github.io/kaelum/)
 
----
+**If Kaelum helps you, consider supporting its development:**
+
+<a href='https://ko-fi.com/Z8Z51NK4KT' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+</div>
 
 ## 🚀 Quick start
 
