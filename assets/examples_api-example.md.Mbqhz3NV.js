@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as t}from"./chunks/framework.DALqws9A.js";const _=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"examples/api-example.md","filePath":"examples/api-example.md"}'),p={name:"examples/api-example.md"};function s(r,o,m,c,n,i){return t(),a("div")}const d=e(p,[["render",s]]);export{_ as __pageData,d as default};

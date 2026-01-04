@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as a}from"./chunks/framework.DALqws9A.js";const d=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"api/setConfig.md","filePath":"api/setConfig.md"}'),o={name:"api/setConfig.md"};function s(n,r,i,c,p,f){return a(),t("div")}const m=e(o,[["render",s]]);export{d as __pageData,m as default};
