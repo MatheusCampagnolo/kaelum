@@ -89,7 +89,7 @@ function start(app, port, cb) {
   let server;
   try {
     server = app.listen(usePort, () => {
-      console.log(`🚀 Kaelum server running on port ${usePort}`);
+      console.log(`🚀 Kaelum server running at http://localhost:${usePort}`);
       if (typeof cb === "function") cb();
     });
   } catch (err) {

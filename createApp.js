@@ -20,6 +20,9 @@ const redirect = require("./core/redirect");
 
 function createApp() {
   const app = express();
+  
+  // Security: disable x-powered-by header to obfuscate server details
+  app.disable("x-powered-by");
 
   // ensure locals object and initial persisted config
   app.locals = app.locals || {};
