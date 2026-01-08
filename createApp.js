@@ -46,6 +46,11 @@ function createApp() {
   app.use(jsonParser);
   app.use(urlencodedParser);
 
+  // --- View Engine (EJS) ---
+  // Set EJS as the default view engine and point to ./views
+  app.set("view engine", "ejs");
+  app.set("views", "./views");
+
   // --- wrapper for core.setConfig ---
   app.setConfig = function (options = {}) {
     // call core setConfig if available (it should persist merged config)
