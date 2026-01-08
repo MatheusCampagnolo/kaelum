@@ -55,6 +55,7 @@ export default defineConfig({
         items: [
           { text: "start()", link: "/api/start" },
           { text: "addRoute()", link: "/api/addRoute" },
+          { text: "apiRoute()", link: "/api/apiRoute" },
           { text: "setConfig()", link: "/api/setConfig" },
         ],
       },
