@@ -1,6 +1,6 @@
 {
   "name": "kaelum",
-  "version": "1.3.6",
+  "version": "1.4.0",
   "description": "A minimalist Node.js framework for building web pages and APIs with simplicity and speed.",
   "main": "index.js",
   "exports": {
@@ -27,6 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^4.18.2",
     "fs-extra": "^11.3.0",

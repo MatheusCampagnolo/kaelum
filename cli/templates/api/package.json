@@ -4,7 +4,7 @@
   "description": "Exemplo de app API gerado pela CLI Kaelum",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "node --watch app.js"
   },
   "keywords": [
     "kaelum",
@@ -13,12 +13,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "kaelum": "^1.3.0",
+    "kaelum": "^1.4.0",
     "cors": "^2.8.5",
     "helmet": "^6.0.0",
     "morgan": "^1.10.0"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  }
+  "devDependencies": {}
 }
