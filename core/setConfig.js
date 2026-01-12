@@ -248,6 +248,22 @@ function setConfig(app, options = {}) {
     }
   }
 
+  // --- View Engine ---
+  if (options.hasOwnProperty("views")) {
+    const v = options.views;
+    if (v && typeof v === "object") {
+      if (v.engine) {
+        app.set("view engine", v.engine);
+        console.log(`🎨 View engine set to: ${v.engine}`);
+      }
+      if (v.path) {
+        const p = path.resolve(process.cwd(), v.path);
+        app.set("views", p);
+        console.log(`🎨 Views directory set to: ${p}`);
+      }
+    }
+  }
+
   // Return the full merged config for convenience
   return app.locals.kaelumConfig;
 }

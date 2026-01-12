@@ -23,7 +23,6 @@ Thumbs.db
 # Testing/coverage
 coverage/
 __tests__/
-test/
 
 # Build/output (if we need in the future)
 dist/

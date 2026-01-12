@@ -6,6 +6,7 @@
 // - exposes existing core helpers (start, addRoute, setMiddleware, apiRoute)
 // - exposes error handler helper app.useErrorHandler()
 
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
