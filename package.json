@@ -10,7 +10,7 @@
     "kaelum": "cli/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose"
   },
   "keywords": [
     "framework",
@@ -34,5 +34,9 @@
     "helmet": "^7.2.0",
     "inquirer": "^12.6.0",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.2.2"
   }
 }
