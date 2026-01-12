@@ -37,6 +37,11 @@ The CLI automatically creates a **project structure** with `app.js`, `routes.js`
 This ensures **consistent project organization** and **reduces setup time**.
 
 
+## Environment Variables
+
+Kaelum automatically loads variables from a `.env` file in your project root using `dotenv`.
+No need to manually `require('dotenv').config()`. Just create a `.env` file and access variables via `process.env`.
+
 ## Core Functions
 
 Kaelum exposes several functions for managing a server.
@@ -146,7 +151,8 @@ app.setConfig({
   static: "public", // serve static files
   bodyParser: true, // JSON + urlencoded parsing
   logs: false,      // request logging
-  port: 3000        // default port
+  port: 3000,       // default port
+  views: { engine: 'ejs', path: './views' } // view engine config
 });
 ```
 

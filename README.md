@@ -52,7 +52,9 @@ npm start
 - Thin abstraction layer over **Express.js** that:
 
   - automates JSON / URL-encoded parsing by default,
+  - automatically loads environment variables from `.env`,
   - automatically configures common security middlewares via `setConfig` (CORS, Helmet),
+  - simplifies view engine setup via `setConfig`,
   - exposes a small, easy-to-learn API for routes, middleware and configuration.
 
 - Small set of helpers for common tasks: `start`, `addRoute`, `apiRoute`, `setConfig`, `static`, `redirect`, `healthCheck`, `useErrorHandler`, and more.
@@ -116,6 +118,7 @@ app.setConfig({
   bodyParser: true, // default: enabled (JSON + urlencoded)
   logs: false, // enable request logging via morgan (if installed)
   port: 3000, // prefered port (used when calling app.start() without port)
+  views: { engine: 'ejs', path: './views' } // configure view engine
 });
 ```
 

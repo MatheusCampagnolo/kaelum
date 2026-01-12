@@ -24,6 +24,7 @@ app.setConfig(options)
 | `logs` | `boolean` | `false` | Enables HTTP request logging (via `morgan`). |
 | `bodyParser` | `boolean` | `true` | Enables/disables JSON and URL-encoded body parsing. |
 | `static` | `string` \| `boolean` | `false` | Path to serve static files from (e.g., `'public'`). |
+| `views` | `Object` | `undefined` | Configure view engine (`{ engine: 'ejs', path: './views' }`). |
 
 ## Examples
 
@@ -42,6 +43,16 @@ app.setConfig({
   cors: { origin: 'https://example.com' }, // limits CORS to one domain
   helmet: true,                            // standard security headers
   bodyParser: false                        // disable if you want custom parsing
+});
+```
+
+### View Config
+```js
+app.setConfig({
+  views: {
+    engine: 'ejs',   // or 'pug', 'hbs'
+    path: './views'  // optional, defaults to ./views
+  }
 });
 ```
 
