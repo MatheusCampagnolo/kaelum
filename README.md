@@ -208,6 +208,18 @@ It will return standardized JSON for errors and log server-side errors (5xx) to 
 
 ---
 
+## 🧪 Running Tests
+
+Kaelum includes a unit test suite using **Jest**. To run the tests:
+
+```bash
+npm test
+```
+
+This checks core functionality including `setConfig`, routes, and error handlers.
+
+---
+
 ## 🔧 Local development & contributing
 
 ```bash
