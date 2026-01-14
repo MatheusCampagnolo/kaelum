@@ -85,7 +85,7 @@ function errorHandlerFactory(options = {}) {
       if (typeof logger === "function") {
         // allow custom logger to receive (err, req, { status })
         logger(normalizedErr, req, { status });
-      } else {
+      } else if (logger !== false) {
         defaultLog(normalizedErr, req);
       }
     } catch (logErr) {
