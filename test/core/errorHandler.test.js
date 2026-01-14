@@ -17,7 +17,7 @@ describe('core/errorHandler', () => {
     });
 
     // Attach handler
-    app.use(errorHandler({ exposeStack: false }));
+    app.use(errorHandler({ exposeStack: false, logger: false }));
 
     const res = await request(app).get('/error');
     expect(res.status).toBe(400);
@@ -29,7 +29,7 @@ describe('core/errorHandler', () => {
     app.get('/crash', (req, res, next) => {
       next(new Error('Crash'));
     });
-    app.use(errorHandler());
+    app.use(errorHandler({ logger: false }));
 
     const res = await request(app).get('/crash');
     expect(res.status).toBe(500);
