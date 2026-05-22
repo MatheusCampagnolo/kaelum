@@ -141,6 +141,16 @@ function createApp() {
       }
       return setMiddleware(app, middlewareOrPath);
     };
+
+    /** Remove Kaelum-tracked middleware. Optionally scoped to a path. @param {string} [path] @returns {MiddlewareEntry[]} */
+    app.removeMiddleware = function (path) {
+      return setMiddleware.remove(app, path);
+    };
+
+    /** List all Kaelum-tracked middleware entries. @returns {MiddlewareEntry[]} */
+    app.getMiddleware = function () {
+      return (app.locals && app.locals._kaelum_middlewares) || [];
+    };
   }
 
   /** Register a health check endpoint. @param {string|HealthOptions} routePath @returns {KaelumApp} */
