@@ -2,11 +2,11 @@
 // Adds routes to an Express app using a flexible handlers object.
 // Supports:
 // - handlers as a single function (assumed GET)
-// - handlers as an object with HTTP methods (get, post, put, delete, patch, all)
+// - handlers as an object with HTTP methods (get, post, put, delete, patch, head, options, all)
 // - nested subpaths as keys beginning with '/' (e.g. '/:id': { get: fn })
 // - handlers as arrays of functions (middleware chains)
 
-const supportedMethods = ["get", "post", "put", "delete", "patch", "all"];
+const supportedMethods = ["get", "post", "put", "delete", "patch", "head", "options", "all"];
 
 function isPlainObject(v) {
   return v && typeof v === "object" && !Array.isArray(v);

@@ -81,6 +81,8 @@ interface RouteHandlers {
   put?: RequestHandler | RequestHandler[];
   delete?: RequestHandler | RequestHandler[];
   patch?: RequestHandler | RequestHandler[];
+  head?: RequestHandler | RequestHandler[];
+  options?: RequestHandler | RequestHandler[];
   all?: RequestHandler | RequestHandler[];
   [subpath: string]: any;
 }
@@ -109,6 +111,12 @@ interface KaelumApp extends Express {
   /** Register middleware (optionally scoped to a path) */
   setMiddleware(middleware: RequestHandler | RequestHandler[]): MiddlewareEntry[];
   setMiddleware(path: string, middleware: RequestHandler | RequestHandler[]): MiddlewareEntry[];
+
+  /** Remove Kaelum-tracked middleware. Optionally scoped to a path. */
+  removeMiddleware(path?: string): MiddlewareEntry[];
+
+  /** List all Kaelum-tracked middleware entries */
+  getMiddleware(): MiddlewareEntry[];
 
   /** Register a health check endpoint */
   healthCheck(path?: string): KaelumApp;
