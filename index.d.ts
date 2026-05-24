@@ -100,6 +100,9 @@ interface KaelumApp extends Express {
   /** Start the HTTP server */
   start(port?: number, cb?: () => void): Server;
 
+  /** Alias for start — familiar for Express users */
+  listen(port?: number, cb?: () => void): Server;
+
   /** Register routes with a flexible handler object */
   addRoute(path: string, handlers: RouteHandlers | RequestHandler | RequestHandler[]): void;
 
@@ -121,6 +124,7 @@ interface KaelumApp extends Express {
   /** Register a health check endpoint */
   healthCheck(path?: string): KaelumApp;
   healthCheck(options?: HealthOptions): KaelumApp;
+  healthCheck(path: string, options: HealthOptions): KaelumApp;
 
   /** Register redirect route(s) */
   redirect(from: string, to: string, status?: number): RedirectEntry[] | null;
