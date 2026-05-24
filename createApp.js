@@ -116,6 +116,9 @@ function createApp() {
     app.start = function (port, cb) {
       return start(app, port, cb);
     };
+
+    /** Alias for start — familiar for Express users. */
+    app.listen = app.start;
   }
 
   /** Register routes with flexible handler objects. @param {string} routePath @param {Object|Function|Array} handlers */
@@ -153,10 +156,10 @@ function createApp() {
     };
   }
 
-  /** Register a health check endpoint. @param {string|HealthOptions} routePath @returns {KaelumApp} */
+  /** Register a health check endpoint. @param {string|HealthOptions} pathOrOpts @param {HealthOptions} [options] @returns {KaelumApp} */
   if (typeof registerHealth === "function") {
-    app.healthCheck = function (routePath = "/health") {
-      registerHealth(app, routePath);
+    app.healthCheck = function (pathOrOpts, options) {
+      registerHealth(app, pathOrOpts, options);
       return app;
     };
   }
