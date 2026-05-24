@@ -63,33 +63,53 @@ function routeExists(app, path, method) {
  * Register a health check endpoint on the provided Express/Kaelum app.
  * @param {Object} app - Express/Kaelum app instance
  * @param {HealthOptions|string} [opts] - options or a string path
+ * @param {HealthOptions} [extraOpts] - additional options when first arg is a string path
  * @returns {Function} the handler function created (useful for tests)
  */
-function registerHealth(app, opts = {}) {
+function registerHealth(app, opts = {}, extraOpts) {
   if (!app || typeof app.get !== "function") {
     throw new Error("Invalid app instance: cannot register health check");
   }
 
-  // allow shorthand: passing a string path
-  const options =
-    typeof opts === "string"
-      ? { path: opts }
-      : Object.assign(
-          {
-            path: DEFAULT_PATH,
-            method: "get",
-            replace: false,
-            readinessCheck: null,
-            include: {
-              uptime: true,
-              pid: true,
-              env: true,
-              timestamp: true,
-              metrics: false,
-            },
-          },
-          opts || {}
-        );
+  // allow shorthand: passing a string path with optional extra options
+  let options;
+  if (typeof opts === "string") {
+    // merge path into extra options if provided: healthCheck(app, "/status", { include: ... })
+    options = Object.assign(
+      {
+        path: DEFAULT_PATH,
+        method: "get",
+        replace: false,
+        readinessCheck: null,
+        include: {
+          uptime: true,
+          pid: true,
+          env: true,
+          timestamp: true,
+          metrics: false,
+        },
+      },
+      extraOpts || {},
+      { path: opts }
+    );
+  } else {
+    options = Object.assign(
+      {
+        path: DEFAULT_PATH,
+        method: "get",
+        replace: false,
+        readinessCheck: null,
+        include: {
+          uptime: true,
+          pid: true,
+          env: true,
+          timestamp: true,
+          metrics: false,
+        },
+      },
+      opts || {}
+    );
+  }
 
   // normalize path and method
   let p =
