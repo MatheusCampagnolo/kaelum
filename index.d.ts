@@ -100,9 +100,6 @@ interface KaelumApp extends Express {
   /** Start the HTTP server */
   start(port?: number, cb?: () => void): Server;
 
-  /** Alias for start — familiar for Express users */
-  listen(port?: number, cb?: () => void): Server;
-
   /** Register routes with a flexible handler object */
   addRoute(path: string, handlers: RouteHandlers | RequestHandler | RequestHandler[]): void;
 

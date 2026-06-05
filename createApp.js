@@ -116,9 +116,6 @@ function createApp() {
     app.start = function (port, cb) {
       return start(app, port, cb);
     };
-
-    /** Alias for start — familiar for Express users. */
-    app.listen = app.start;
   }
 
   /** Register routes with flexible handler objects. @param {string} routePath @param {Object|Function|Array} handlers */
