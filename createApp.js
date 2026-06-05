@@ -6,7 +6,13 @@
 // - exposes existing core helpers (start, addRoute, setMiddleware, apiRoute)
 // - exposes error handler helper app.useErrorHandler()
 
-require("dotenv").config();
+// Load environment variables: env-specific file first (.env.production, etc),
+// then base .env as fallback. Existing process.env values are never overwritten.
+const dotenv = require("dotenv");
+const nodeEnv = process.env.NODE_ENV || "development";
+dotenv.config({ path: `.env.${nodeEnv}` });
+dotenv.config(); // base .env fallback (won't override existing vars)
+
 const express = require("express");
 const path = require("path");
 
@@ -116,9 +122,6 @@ function createApp() {
     app.start = function (port, cb) {
       return start(app, port, cb);
     };
-
-    /** Alias for start — familiar for Express users. */
-    app.listen = app.start;
   }
 
   /** Register routes with flexible handler objects. @param {string} routePath @param {Object|Function|Array} handlers */
