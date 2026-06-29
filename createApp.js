@@ -62,7 +62,7 @@ function createApp() {
   // --- View Engine (EJS) ---
   // Set EJS as the default view engine and point to ./views
   app.set("view engine", "ejs");
-  app.set("views", "./views");
+  app.set("views", path.resolve(process.cwd(), "views"));
 
   // --- wrapper for core.setConfig ---
   app.setConfig = function (options = {}) {
