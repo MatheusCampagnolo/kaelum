@@ -27,6 +27,8 @@ const redirect = require("./core/redirect");
 const { removeMiddlewareByFn } = require("./core/utils");
 const { registerPlugin, getPlugins } = require("./core/plugin");
 const { onShutdown, close } = require("./core/shutdown");
+const requestId = require("./core/requestId");
+const timing = require("./core/timing");
 
 function createApp() {
   const app = express();
@@ -171,6 +173,26 @@ function createApp() {
   if (typeof redirect === "function") {
     app.redirect = function (from, to, status = 302) {
       return redirect(app, from, to, status);
+    };
+  }
+
+  // ---------------------------
+  // Observability helpers
+  // ---------------------------
+
+  /** Add X-Request-Id header to every request. @param {RequestIdOptions} [options] @returns {KaelumApp} */
+  if (typeof requestId === "function") {
+    app.requestId = function (options) {
+      requestId(app, options);
+      return app;
+    };
+  }
+
+  /** Add Server-Timing header with request duration. @param {TimingOptions} [options] @returns {KaelumApp} */
+  if (typeof timing === "function") {
+    app.timing = function (options) {
+      timing(app, options);
+      return app;
     };
   }
 
