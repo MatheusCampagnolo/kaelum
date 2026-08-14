@@ -70,6 +70,20 @@ interface RedirectEntry {
   status: number;
 }
 
+interface RequestIdOptions {
+  /** Header name (default 'X-Request-Id') */
+  headerName?: string;
+  /** Custom ID generator function (default crypto.randomUUID) */
+  generator?: () => string;
+}
+
+interface TimingOptions {
+  /** Header name (default 'Server-Timing') */
+  headerName?: string;
+  /** Decimal places for duration in ms (default 2) */
+  precision?: number;
+}
+
 interface MiddlewareEntry {
   path: string | null;
   handler: RequestHandler;
@@ -152,6 +166,12 @@ interface KaelumApp extends Express {
 
   /** Register a cleanup function to run during graceful shutdown */
   onShutdown(fn: () => void | Promise<void>): KaelumApp;
+
+  /** Add X-Request-Id header to every request */
+  requestId(options?: RequestIdOptions): KaelumApp;
+
+  /** Add Server-Timing header with request duration */
+  timing(options?: TimingOptions): KaelumApp;
 }
 
 /**
