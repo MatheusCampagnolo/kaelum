@@ -29,6 +29,7 @@ const { registerPlugin, getPlugins } = require("./core/plugin");
 const { onShutdown, close } = require("./core/shutdown");
 const requestId = require("./core/requestId");
 const timing = require("./core/timing");
+const responseHelpers = require("./core/responseHelpers");
 
 function createApp() {
   const app = express();
@@ -192,6 +193,14 @@ function createApp() {
   if (typeof timing === "function") {
     app.timing = function (options) {
       timing(app, options);
+      return app;
+    };
+  }
+
+  /** Expose semantic response helpers on res object (e.g., res.ok, res.badRequest). @returns {KaelumApp} */
+  if (typeof responseHelpers === "function") {
+    app.useResponseHelpers = function () {
+      responseHelpers(app);
       return app;
     };
   }

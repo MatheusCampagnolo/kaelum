@@ -172,6 +172,25 @@ interface KaelumApp extends Express {
 
   /** Add Server-Timing header with request duration */
   timing(options?: TimingOptions): KaelumApp;
+
+  /** Expose semantic response helpers on res object */
+  useResponseHelpers(): KaelumApp;
+}
+
+declare global {
+  namespace Express {
+    interface Response {
+      ok(data?: any): this;
+      created(data?: any): this;
+      noContent(): this;
+      badRequest(error?: any): this;
+      unauthorized(error?: any): this;
+      forbidden(error?: any): this;
+      notFound(error?: any): this;
+      conflict(error?: any): this;
+      error(error?: any, status?: number): this;
+    }
+  }
 }
 
 /**
