@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/kaelumjs/kaelum/issues"
   },
-  "homepage": "https://kaelumjs.vercel.app/",
+  "homepage": "https://kaelumjs.matthcodes.dev",
   "dependencies": {
     "cors": "2.8.6",
     "dotenv": "17.4.2",
