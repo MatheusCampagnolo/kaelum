@@ -30,6 +30,7 @@ const { onShutdown, close } = require("./core/shutdown");
 const requestId = require("./core/requestId");
 const timing = require("./core/timing");
 const responseHelpers = require("./core/responseHelpers");
+const group = require("./core/group");
 
 function createApp() {
   const app = express();
@@ -202,6 +203,13 @@ function createApp() {
     app.useResponseHelpers = function () {
       responseHelpers(app);
       return app;
+    };
+  }
+
+  /** Create a route group scoped to a prefix with optional shared middleware. @param {string} prefix @param {...Function} middleware @returns {KaelumGroup} */
+  if (typeof group === "function") {
+    app.group = function (prefix, ...middleware) {
+      return group(app, prefix, ...middleware);
     };
   }
 
