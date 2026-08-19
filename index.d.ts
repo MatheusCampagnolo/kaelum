@@ -104,6 +104,31 @@ interface RouteHandlers {
 /** Plugin function signature */
 type KaelumPlugin = (app: KaelumApp, options?: Record<string, any>) => void;
 
+/** A route group created by app.group() — scoped to a URL prefix */
+interface KaelumGroup {
+  /** The normalised prefix this group is mounted at */
+  readonly prefix: string;
+
+  /** The underlying Express Router instance */
+  readonly router: any;
+
+  /** Register routes within this group (paths relative to group prefix) */
+  addRoute(path: string, handlers: RouteHandlers | RequestHandler | RequestHandler[]): KaelumGroup;
+
+  /** Register RESTful API routes within this group */
+  apiRoute(resource: string, handlers: RouteHandlers | RequestHandler | boolean): KaelumGroup;
+
+  /** Register redirect route(s) within this group */
+  redirect(from: string, to: string, status?: number): KaelumGroup;
+  redirect(map: Record<string, string>): KaelumGroup;
+
+  /** Register a health check endpoint within this group */
+  healthCheck(pathOrOptions?: string | HealthOptions, options?: HealthOptions): KaelumGroup;
+
+  /** Create a nested sub-group under this group */
+  group(subPrefix: string, ...middleware: RequestHandler[]): KaelumGroup;
+}
+
 interface KaelumApp extends Express {
   /** Configure Kaelum features (cors, helmet, static, logs, etc.) */
   setConfig(options: KaelumConfig): KaelumConfig;
@@ -175,6 +200,9 @@ interface KaelumApp extends Express {
 
   /** Expose semantic response helpers on res object */
   useResponseHelpers(): KaelumApp;
+
+  /** Create a route group scoped to a URL prefix with optional shared middleware */
+  group(prefix: string, ...middleware: RequestHandler[]): KaelumGroup;
 }
 
 declare global {
