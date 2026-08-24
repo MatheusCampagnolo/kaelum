@@ -8,6 +8,9 @@
     ".": {
       "import": "./index.mjs",
       "require": "./index.js"
+    },
+    "./validate": {
+      "require": "./validate.js"
     }
   },
   "bin": {

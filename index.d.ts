@@ -1,6 +1,44 @@
 import { Express, RequestHandler, ErrorRequestHandler } from "express";
 import { Server } from "http";
 
+// ---------------------------------------------------------------------------
+// Validate subpath — `require('kaelum/validate')`
+// ---------------------------------------------------------------------------
+
+/** Rules for a single validated field */
+interface ValidateFieldRule {
+  /** Expected type. query/params values are coerced automatically. */
+  type?: "string" | "number" | "boolean" | "array" | "object";
+  /** Field must be present and non-empty */
+  required?: boolean;
+  /** For string: min length. For number: min value. For array: min items. */
+  min?: number;
+  /** For string: max length. For number: max value. For array: max items. */
+  max?: number;
+  /**
+   * Regex pattern or preset name ('email' | 'url' | 'uuid' | 'alphanumeric').
+   * Only applied to string values.
+   */
+  pattern?: string | RegExp;
+  /**
+   * Custom validator. Return true to pass, or an error message string to fail.
+   */
+  custom?: (value: any) => true | string;
+}
+
+/** Validation schema passed to validate() */
+interface ValidateSchema {
+  body?: Record<string, ValidateFieldRule>;
+  query?: Record<string, ValidateFieldRule>;
+  params?: Record<string, ValidateFieldRule>;
+}
+
+/**
+ * Middleware factory that validates request body, query, and params.
+ * Returns 400 with { error, fields } on failure, calls next() on success.
+ */
+export declare function validate(schema: ValidateSchema): RequestHandler;
+
 interface KaelumConfig {
   cors?: boolean | object;
   helmet?: boolean | object;
