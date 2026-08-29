@@ -39,6 +39,44 @@ interface ValidateSchema {
  */
 export declare function validate(schema: ValidateSchema): RequestHandler;
 
+// ---------------------------------------------------------------------------
+// Test subpath — `require('kaelum/test')`
+// ---------------------------------------------------------------------------
+
+/** Options accepted by all TestClient methods */
+interface TestClientOptions {
+  /** Request body — auto-serialised as JSON, sets Content-Type automatically */
+  body?: any;
+  /** Additional request headers */
+  headers?: Record<string, string>;
+  /** Query params appended to the path */
+  query?: Record<string, any>;
+  /** Auth shortcuts */
+  auth?: {
+    /** Sets Authorization: Bearer <token> */
+    bearer?: string;
+    /** Sets Authorization: Basic <base64(user:pass)> */
+    basic?: string;
+  };
+}
+
+/** HTTP test client returned by testApp() */
+interface TestClient {
+  get(path: string, options?: TestClientOptions): Promise<any>;
+  post(path: string, options?: TestClientOptions): Promise<any>;
+  put(path: string, options?: TestClientOptions): Promise<any>;
+  patch(path: string, options?: TestClientOptions): Promise<any>;
+  delete(path: string, options?: TestClientOptions): Promise<any>;
+  head(path: string, options?: TestClientOptions): Promise<any>;
+}
+
+/**
+ * Create a test client for the given Kaelum/Express app.
+ * Wraps supertest — no server needs to be started.
+ * Requires `supertest` to be installed: npm install supertest --save-dev
+ */
+export declare function testApp(app: any): TestClient;
+
 interface KaelumConfig {
   cors?: boolean | object;
   helmet?: boolean | object;

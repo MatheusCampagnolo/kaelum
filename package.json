@@ -11,6 +11,9 @@
     },
     "./validate": {
       "require": "./validate.js"
+    },
+    "./test": {
+      "require": "./test.js"
     }
   },
   "bin": {
@@ -63,5 +66,12 @@
     "jest": "30.4.2",
     "prettier": "3.9.3",
     "supertest": "7.2.2"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "^.*/validate\\.js$",
+      "^.*/test\\.js$"
+    ]
   }
 }
