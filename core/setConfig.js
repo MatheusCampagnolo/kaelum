@@ -107,6 +107,18 @@ function removeKaelumRateLimit(app) {
 }
 
 /**
+ * Remove Kaelum-installed CSRF middleware (if any)
+ * @param {Object} app
+ */
+function removeKaelumCsrf(app) {
+  const prev = app.locals && app.locals._kaelum_csrf;
+  if (prev) {
+    removeMiddlewareByFn(app, prev);
+    app.locals._kaelum_csrf = null;
+  }
+}
+
+/**
  * Apply configuration options to the app
  * @param {Object} app - express app instance
  * @param {Object} options - supported keys: cors, helmet, static, logs, port, bodyParser
@@ -293,6 +305,25 @@ function setConfig(app, options = {}) {
       // disable Kaelum-installed rate limiter if present
       removeKaelumRateLimit(app);
       console.log("⏱️  Rate limiting disabled (Kaelum-managed).");
+    }
+  }
+
+  // --- CSRF Protection ---
+  if (options.hasOwnProperty("csrf")) {
+    if (options.csrf) {
+      const { originCheck } = require("./csrf");
+      const csrfOpts = options.csrf === true ? {} : options.csrf;
+
+      // remove previous Kaelum-installed CSRF middleware if exists
+      removeKaelumCsrf(app);
+
+      const csrfFn = originCheck(csrfOpts);
+      app.locals._kaelum_csrf = csrfFn;
+      app.use(csrfFn);
+      console.log("🔒 CSRF protection activated (origin check).");
+    } else {
+      removeKaelumCsrf(app);
+      console.log("🔒 CSRF protection disabled (Kaelum-managed).");
     }
   }
 

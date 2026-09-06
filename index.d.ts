@@ -88,6 +88,24 @@ interface KaelumConfig {
   logger?: boolean | false;
   gracefulShutdown?: boolean | GracefulShutdownConfig;
   rateLimit?: boolean | RateLimitConfig;
+  /** CSRF protection via origin check. Pass true to use host-based auto-detection. */
+  csrf?: boolean | CsrfOptions;
+}
+
+/** Options for CSRF protection */
+interface CsrfOptions {
+  /** Allowed origin(s). Defaults to the request host when omitted. */
+  origin?: string | string[];
+  /** Paths excluded from CSRF checks (exact match or prefix ending in '/*'). */
+  exclude?: string[];
+  /** HTTP methods to protect. Default: POST, PUT, PATCH, DELETE. */
+  methods?: string[];
+  /** Cookie name for double-submit mode. Default: 'csrf-token'. */
+  cookie?: string;
+  /** Header name for double-submit mode. Default: 'X-CSRF-Token'. */
+  header?: string;
+  /** Extra options passed to res.cookie() in double-submit mode. */
+  cookieOptions?: object;
 }
 
 interface HealthOptions {
@@ -279,6 +297,9 @@ interface KaelumApp extends Express {
 
   /** Create a route group scoped to a URL prefix with optional shared middleware */
   group(prefix: string, ...middleware: RequestHandler[]): KaelumGroup;
+
+  /** Activate CSRF double-submit cookie + custom header protection */
+  useCsrf(options?: CsrfOptions): KaelumApp;
 }
 
 declare global {
