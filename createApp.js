@@ -31,6 +31,7 @@ const requestId = require("./core/requestId");
 const timing = require("./core/timing");
 const responseHelpers = require("./core/responseHelpers");
 const group = require("./core/group");
+const { doubleSubmit: csrfDoubleSubmit } = require("./core/csrf");
 
 function createApp() {
   const app = express();
@@ -210,6 +211,15 @@ function createApp() {
   if (typeof group === "function") {
     app.group = function (prefix, ...middleware) {
       return group(app, prefix, ...middleware);
+    };
+  }
+
+  /** Activate CSRF double-submit cookie protection. @param {CsrfOptions} [options] @returns {KaelumApp} */
+  if (typeof csrfDoubleSubmit === "function") {
+    app.useCsrf = function (options) {
+      const mw = csrfDoubleSubmit(options);
+      app.use(mw);
+      return app;
     };
   }
 
